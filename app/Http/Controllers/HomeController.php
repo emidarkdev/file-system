@@ -7,19 +7,165 @@ use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
 
     public function index()
     {
-       
-        return view('index');
+        $route = '/';
+        $directories = [];
+        $files = [];
+
+        foreach (Storage::directories() as $dir) {
+            array_push($directories, [
+                'name' => pathinfo(storage_path($dir))['filename'],
+                'route' => $dir,
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($dir)),
+            ]);
+        }
+        foreach (Storage::files() as $file) {
+            array_push($files, [
+                'name' => pathinfo(storage_path($file))['filename'],
+                'ext' => pathinfo(storage_path($file))['extension'],
+                'filename' => pathinfo(storage_path($file))['filename'] . '.' . pathinfo(storage_path($file))['extension'],
+                'size' => number_format(Storage::size($file) / 1048576, 2),
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($file)),
+                'route' => $file,
+            ]);
+        }
+        return view('index', compact('directories', 'files', 'route'));
     }
 
 
 
-}
+
+    public function directory(Request $request)
+    {
+
+        $route = $request->get('route') ? $request->get('route') : '/';
+        $directories = [];
+        $files = [];
+
+        foreach (Storage::directories($route) as $dir) {
+            array_push($directories, [
+                'name' => pathinfo(storage_path($dir))['filename'],
+                'route' => $dir,
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($dir)),
+            ]);
+        }
+        foreach (Storage::files($route) as $file) {
+            array_push($files, [
+                'name' => pathinfo(storage_path($file))['filename'],
+                'ext' => pathinfo(storage_path($file))['extension'],
+                'filename' => pathinfo(storage_path($file))['filename'] . '.' . pathinfo(storage_path($file))['extension'],
+                'size' => number_format(Storage::size($file) / 1048576, 2),
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($file)),
+                'route' => $file,
+            ]);
+        }
+        return view('index', compact('directories', 'files', 'route'));
+    }
+
+
+
+
+    public function deleteFile(Request $request)
+    {
+        $route = $request->get('route');
+        $checkDir = Storage::directoryExists($route);
+        if ($checkDir) {
+            Storage::deleteDirectory($route);
+        } else {
+            Storage::delete($route);
+        }
+
+        return redirect()->back();
+    }
+
+
+
+    public function moveFile(Request $request)
+    {
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $filename = explode('/', $from)[count(explode('/', $from)) - 1];
+        if (trim($to) == '/') {
+            Storage::move($from, $filename);
+        } else {
+            Storage::move($from, $to . '/' . $filename);
+        }
+        return redirect()->back();
+    }
+
+
+
+
+
+    public function changeName(Request $request)
+    {
+        $route = $request->get('route');
+        $name = $request->get('name');
+        $checkDir = Storage::directoryExists($route);
+
+        if ($checkDir) {
+            $route_params = explode('/', $route);
+            array_pop($route_params);
+            $base_route = implode('/', $route_params);
+            Storage::move($route, $base_route . '/' . $name);
+        } else {
+            $route_params = explode('/', $route);
+            array_pop($route_params);
+            $filename = explode('/', $route)[count(explode('/', $route)) - 1];
+            $filename = explode('.', $filename);
+            $file_extension = $filename[1];
+            array_push($route_params, $name . '.' . $file_extension);
+            $newRoute = implode('/', $route_params);
+            Storage::move($route, $newRoute);
+        }
+
+        return redirect()->back();
+    }
+
+
+
+
+    public function createDir(Request $request)
+    {
+        $route = $request->get('route');
+        $name = $request->get('name');
+
+        Storage::makeDirectory(trim('/', $route) . '/' . $name);
+        return redirect()->back();
+    }
+
+
+
+    public function uploadShow(Request $request)
+    {
+        $route  = $request->get('route');
+        return view('upload', compact('route'));
+    }
+    public function uploadText(Request $request) {
+        $route  = $request->get('route');
+        return view('uploadTx', compact('route'));
+    }
+    public function upload(Request $request)
+    {
+        $image  = $request->has('image') ? $request->image : null;
+        $mark  = $request->has('mark') ? ($request->mark == 'on' ? true : false) : null;
+        $route  = $request->route;
+
+        if ($image) {
+            $imageName = Str::random(8) . '-' . explode('.', $image->getClientOriginalName())[0] . '.' . $image->extension();
+            Storage::putFileAs($route, $image, $imageName);
+            dd($route . '/' . $imageName);
+        }else{
+
+        }
+    }
+};
 
 
 
