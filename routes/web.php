@@ -18,5 +18,7 @@ Route::get('/',[HomeController::class,'index']);
 Route::get('/directory',[HomeController::class,'directory']);
 Route::get('/delete-file',[HomeController::class,'deleteFile']);
 Route::get('/move-file',[HomeController::class,'moveFile']);
+Route::get('/change-name',[HomeController::class,'changeName']);
+
 
 

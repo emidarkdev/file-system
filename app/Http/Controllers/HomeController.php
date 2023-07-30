@@ -84,8 +84,32 @@ class HomeController extends Controller
         if (trim($to) == '/') {
             Storage::move($from, $filename);
         }else{
-            Storage::move($from, $to.'/'.$from);
+            Storage::move($from, $to.'/'.$filename);
         }
+        return redirect()->back();
+    }
+    public function changeName(Request $request)
+    {
+        $route = $request->get('route');
+        $name = $request->get('name');
+        $checkDir = Storage::directoryExists($route);
+
+        if($checkDir){
+            $route_params = explode('/',$route);
+            array_pop($route_params);
+            $base_route = implode('/',$route_params);
+            Storage::move($route,$base_route.'/'.$name);
+        }else{
+            $route_params = explode('/',$route);
+            array_pop($route_params);
+            $filename = explode('/',$route)[count(explode('/',$route))-1];
+            $filename = explode('.',$filename);
+            $file_extension = $filename[1];
+            array_push($route_params,$name.'.'.$file_extension);
+            $newRoute = implode('/',$route_params);
+            Storage::move($route,$newRoute);
+        }
+        
         return redirect()->back();
     }
 }

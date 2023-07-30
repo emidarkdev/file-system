@@ -195,7 +195,7 @@
                             <div class="items-meta">
                                 <a href='{{url("delete-file?route={$dir['route']}")}}'>حذف</a> -
                                 <a onclick="moveFile( '{{$dir['route']}}' )">انتقال</a> -
-                                <a href="#">تغییر نام</a>
+                                <a onclick="changeName( '{{$dir['route']}}' )">تغییر نام</a>
                             </div>
                         </li>
                     @endforeach
@@ -215,7 +215,7 @@
                                 <a href="#">ویرایش</a> -
                                 <a href="#">نمایش</a> -
                                 <a onclick="moveFile( '{{$file['route']}}' )">انتقال</a> -
-                                <a href="#">تغییر نام</a>
+                                <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a>
                             </div>
                         </li>
                     @endforeach
