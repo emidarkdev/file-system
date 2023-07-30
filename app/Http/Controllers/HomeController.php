@@ -13,7 +13,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $route = '';
+        $route = '/';
         $directories = [];
         $files = [];
 
@@ -39,7 +39,7 @@ class HomeController extends Controller
     public function directory(Request $request)
     {
 
-        $route = $request->get('route') ? $request->get('route') : '';
+        $route = $request->get('route') ? $request->get('route') : '/';
         $directories = [];
         $files = [];
 
@@ -112,7 +112,15 @@ class HomeController extends Controller
         
         return redirect()->back();
     }
-}
+    public function createDir(Request $request) {
+        $route = $request->get('route');
+        $name = $request->get('name');
+
+        Storage::makeDirectory(trim('/',$route).'/'.$name);
+        return redirect()->back();
+        
+    }
+};
 
 
 

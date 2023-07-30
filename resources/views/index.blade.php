@@ -156,9 +156,7 @@
                                     <tbody>
                                         <tr>
                                             <td valign="top" style="text-align: left;">
-                                                <input type="button" id="smallbutton" value="پوشه جدید"
-                                                    title="Make a new subdirectory in directory /public_html (accesskey w)"
-                                                    accesskey="w">
+                                                <button type="button" id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</button>
                                                 <input type="button" id="smallbutton" value="فایل جدید"
                                                     title="Create a new file in directory /public_html (accesskey y)"
                                                     accesskey="y">
@@ -176,7 +174,7 @@
                                                         title="Download a zip file containing all selected entries (accesskey x)"
                                                         accesskey="x">
                                                 </div>
-                                            </td>
+                                            </td> 
                                         </tr>
                                     </tbody>
                                 </table>

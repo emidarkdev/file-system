@@ -10,3 +10,9 @@ let changeName = (route) => {
         location.href =`/change-name?route=${route}&name=${name}`;
     }
 }
+let newDirectory = (route) => {
+    let name = prompt('نام پوشه را وارد کنید');
+    if (name) {
+        location.href =`/create-dir?route=${route}&name=${name}`;
+    }
+}
