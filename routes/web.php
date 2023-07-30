@@ -20,6 +20,9 @@ Route::get('/delete-file',[HomeController::class,'deleteFile']);
 Route::get('/move-file',[HomeController::class,'moveFile']);
 Route::get('/change-name',[HomeController::class,'changeName']);
 Route::get('/create-dir',[HomeController::class,'createDir']);
+Route::get('/upload-file',[HomeController::class,'uploadShow']);
+Route::get('/upload-text',[HomeController::class,'uploadText']);
+Route::post('/upload',[HomeController::class,'upload']);
 
 
 

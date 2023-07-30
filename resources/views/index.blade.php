@@ -156,25 +156,20 @@
                                     <tbody>
                                         <tr>
                                             <td valign="top" style="text-align: left;">
-                                                <button type="button" id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</button>
-                                                <input type="button" id="smallbutton" value="فایل جدید"
-                                                    title="Create a new file in directory /public_html (accesskey y)"
-                                                    accesskey="y">
-                                                <input type="button" id="smallbutton" value="آپلود"
-                                                    title="Upload new files in directory /public_html (accesskey u)"
-                                                    accesskey="u">
-                                                <input type="button" id="smallbutton" value="انتقال"
-                                                    title="Move the selected entries (accesskey m)" accesskey="m">
-                                                <input type="button" id="smallbutton" value="حذف"
-                                                    title="Delete the selected entries (accesskey d)" accesskey="d">
+                                                <a  id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</a>
+                                                <a id="smallbutton" href='{{url("upload-text?route={$route}")}}'>فایل جدید</a>
+                                                <a id="smallbutton" href='{{url("upload-file?route={$route}")}}'>آپلود</a>
+                                                <a id="smallbutton">انتقال</a>
+                                                <a id="smallbutton">حذف</a>
+                                                <a id="smallbutton">دانلود</a>
                                             </td>
-                                            <td valign="top" style="text-align: right;">
+                                            {{-- <td valign="top" style="text-align: right;">
                                                 <div style="margin-top: 3px;">
                                                     <input type="button" id="smallbutton" value="دانلود"
                                                         title="Download a zip file containing all selected entries (accesskey x)"
                                                         accesskey="x">
                                                 </div>
-                                            </td> 
+                                            </td>  --}}
                                         </tr>
                                     </tbody>
                                 </table>

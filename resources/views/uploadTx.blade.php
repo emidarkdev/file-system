@@ -24,7 +24,7 @@
 				<div id="content">
 					<!-- title -->
 					<div id="page-title">
-						<span class="title">آپلود فایل - <a href="files.html"> » بازگشت </a></span>
+						<span class="title">آپلود فایل متنی- <a href="files.html"> » بازگشت </a></span>
 						<div style="text-align: right; margin-top: 10px;">
 						</div>
 					</div>
@@ -33,9 +33,7 @@
 							@csrf
                             <div class="viewfooter">
                             <div>
-                            <input type="file" name="image"/>
-                            	<input type="checkbox" name="mark"/> - افزودن واترمارک
-                            </div>
+                            <textarea name="text" id="" cols="30" rows="10"></textarea>
 							<input type="submit" class="button2" value="آپلود فایل" />
                             </div>
                         </form>

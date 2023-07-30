@@ -3,7 +3,7 @@
 
 @font-face{
 	font-family:IranSansW;
-	src:url(./IRANSans_0.ttf);
+	src:url(./../files/IRANSans_0.ttf);
 }
 
 @import url('reset.css');
@@ -1079,10 +1079,12 @@ top: 188px;
 	width: 100px;
 }
 
-#BrowseForm #smallbutton{
-	background: #ffd800; 
-	color: #363636;
-	padding: 1px 3px;
+ #smallbutton{
+	background: #ffd800 !important; 
+	color: #363636 !important;
+	padding: 10px 20px !important;
+	text-decoration: none;cursor: pointer;
+	font-size: 13px;border-radius: 3px;
 }
 
 #LoginForm1 #LoginButton1:hover,
