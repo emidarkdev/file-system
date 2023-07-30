@@ -13,12 +13,81 @@ class HomeController extends Controller
 
     public function index()
     {
-       
-        return view('index');
+        $route = '';
+        $directories = [];
+        $files = [];
+
+        foreach (Storage::directories() as $dir) {
+            array_push($directories, [
+                'name' => pathinfo(storage_path($dir))['filename'],
+                'route' => $dir,
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($dir)),
+            ]);
+        }
+        foreach (Storage::files() as $file) {
+            array_push($files, [
+                'name' => pathinfo(storage_path($file))['filename'],
+                'ext' => pathinfo(storage_path($file))['extension'],
+                'filename' => pathinfo(storage_path($file))['filename'] . '.' . pathinfo(storage_path($file))['extension'],
+                'size' => number_format(Storage::size($file) / 1048576, 2),
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($file)),
+                'route' => $file,
+            ]);
+        }
+        return view('index', compact('directories', 'files', 'route'));
+    }
+    public function directory(Request $request)
+    {
+
+        $route = $request->get('route') ? $request->get('route') : '';
+        $directories = [];
+        $files = [];
+
+        foreach (Storage::directories($route) as $dir) {
+            array_push($directories, [
+                'name' => pathinfo(storage_path($dir))['filename'],
+                'route' => $dir,
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($dir)),
+            ]);
+        }
+        foreach (Storage::files($route) as $file) {
+            array_push($files, [
+                'name' => pathinfo(storage_path($file))['filename'],
+                'ext' => pathinfo(storage_path($file))['extension'],
+                'filename' => pathinfo(storage_path($file))['filename'] . '.' . pathinfo(storage_path($file))['extension'],
+                'size' => number_format(Storage::size($file) / 1048576, 2),
+                'modify' => date('Y/m/d h:i:s', Storage::lastModified($file)),
+                'route' => $file,
+            ]);
+        }
+        return view('index', compact('directories', 'files', 'route'));
     }
 
 
+    public function deleteFile(Request $request)
+    {
+        $route = $request->get('route');
+        $checkDir = Storage::directoryExists($route);
+        if ($checkDir) {
+            Storage::deleteDirectory($route);
+        } else {
+            Storage::delete($route);
+        }
 
+        return redirect()->back();
+    }
+    public function moveFile(Request $request)
+    {
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $filename = explode('/',$from)[count(explode('/',$from))-1];
+        if (trim($to) == '/') {
+            Storage::move($from, $filename);
+        }else{
+            Storage::move($from, $to.'/'.$from);
+        }
+        return redirect()->back();
+    }
 }
 
 

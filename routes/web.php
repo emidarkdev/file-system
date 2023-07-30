@@ -15,3 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[HomeController::class,'index']);
+Route::get('/directory',[HomeController::class,'directory']);
+Route::get('/delete-file',[HomeController::class,'deleteFile']);
+Route::get('/move-file',[HomeController::class,'moveFile']);
+
+
