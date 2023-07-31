@@ -169,12 +169,12 @@ class HomeController extends Controller
         $route  = $request->route;
 
         if ($image) {
-            $imageName = Str::random(8) . '-' . explode('.', $image->getClientOriginalName())[0] . '.' . $image->extension();
+            $imageName = Str::random(8) . '.' . $image->extension();
             if ($mark) {
                 $watermark = public_path('files/watermark.png');
                 $mainImage = Image::make($request->file('image')->getRealPath());
                 $mainImage->insert($watermark, 'top-left', 20, 20);
-                $mainImage->save(public_path('storage/'.$route.'/'.$imageName));
+                $mainImage->save(public_path('storage/' . $route . '/' . $imageName));
             } else {
                 Storage::putFileAs($route, $image, $imageName);
             }
@@ -233,7 +233,21 @@ class HomeController extends Controller
 
     public function createMark(Request $request)
     {
-        dd($request->all());
+        $route = $request->get('route');
+        $watermark = public_path('files/watermark.png');
+
+        $fileUrl = public_path('storage/' . $route);
+        $fileName = explode('/',$route)[count(explode('/',$route))-1];
+
+        $fileDir = explode('/',$route);
+        array_pop($fileDir);
+        $fileDir = implode('/',$fileDir);
+
+        $mainImage = Image::make($fileUrl);
+        $mainImage->insert($watermark, 'top-left', 20, 20);
+        Storage::delete($route);
+        $mainImage->save(public_path('storage/' . $fileDir . '/' . $fileName));
+        return redirect()->back();
     }
 
 

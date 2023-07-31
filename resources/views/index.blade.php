@@ -134,7 +134,7 @@
                             <td rowspan="2" width="40">&nbsp; </td>
                             <td style="text-align: left;">
                                 <form action="{{url('directory')}}" method="get">
-                                    <input type="text" name="route" value="{{$route}}" placeholder="example : file/images" style="width: 400px;">
+                                    <input type="text" name="route" value="{{$route}}" placeholder="example : file/images" style="width: 400px;direction:ltr">
                                     <button type="submit" title="List">
 										<img src="./files/view_tree.png" alt="List" style="border: 0px; margin: 1px; width: 32px; height: 32px; vertical-align: middle;">
 									</button>
