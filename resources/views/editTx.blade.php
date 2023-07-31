@@ -24,7 +24,7 @@
 				<div id="content">
 					<!-- title -->
 					<div id="page-title">
-						<span class="title">آپلود فایل متنی- <a href="files.html"> » بازگشت </a></span>
+						<span class="title">آپلود فایل متنی- <a href="{{url()->previous()}}"> » بازگشت </a></span>
 						<div style="text-align: right; margin-top: 10px;">
 						</div>
 					</div>

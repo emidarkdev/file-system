@@ -25,7 +25,7 @@
 				<div id="content">
 					<!-- title -->
 					<div id="page-title">
-						<span class="title">ویرایش file.txt - <a href="files.html"> » بازگشت </a></span>
+						<span class="title">ویرایش - <a href="{{url()->previous()}}"> » بازگشت </a></span>
 						<div style="text-align: right; margin-top: 10px;">
 						</div>
 					</div>
