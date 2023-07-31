@@ -17,7 +17,7 @@ class HomeController extends Controller
         $route = '/';
         $directories = [];
         $files = [];
-        $imageExtensions = ['png','jpg','jpeg','gif'];
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'gif'];
 
         foreach (Storage::directories() as $dir) {
             array_push($directories, [
@@ -36,7 +36,7 @@ class HomeController extends Controller
                 'route' => $file,
             ]);
         }
-        return view('index', compact('directories', 'files', 'route','imageExtensions'));
+        return view('index', compact('directories', 'files', 'route', 'imageExtensions'));
     }
 
 
@@ -48,7 +48,7 @@ class HomeController extends Controller
         $route = $request->get('route') ? $request->get('route') : '/';
         $directories = [];
         $files = [];
-        $imageExtensions = ['png','jpg','jpeg','gif'];
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'gif'];
         foreach (Storage::directories($route) as $dir) {
             array_push($directories, [
                 'name' => pathinfo(storage_path($dir))['filename'],
@@ -66,7 +66,7 @@ class HomeController extends Controller
                 'route' => $file,
             ]);
         }
-        return view('index', compact('directories', 'files', 'route','imageExtensions'));
+        return view('index', compact('directories', 'files', 'route', 'imageExtensions'));
     }
 
 
@@ -137,7 +137,8 @@ class HomeController extends Controller
         $route = $request->get('route');
         $name = $request->get('name');
 
-        Storage::makeDirectory(trim('/', $route) . '/' . $name);
+
+        Storage::makeDirectory($route . '/' . $name);
         return redirect()->back();
     }
 
@@ -173,46 +174,77 @@ class HomeController extends Controller
                 $ext = $text_file->extension() == null ? 'txt' : $text_file->extension();
                 $fileName = Str::random(8) . '-' . explode('.', $text_file->getClientOriginalName())[0] . '.' . $ext;
                 Storage::putFileAs($route, $text_file, $fileName);
-                
             }
         }
         return redirect("/directory?route={$route}");
     }
 
-    public function editTx(Request $request) {
+    public function editTx(Request $request)
+    {
         $route =  $request->get('route');
         $text_info = pathinfo(Storage::url($route));
         $text_info['text'] = Storage::get($route);
-        return view('editTx',compact('text_info','route'));
+        return view('editTx', compact('text_info', 'route'));
     }
-    public function updateTx(Request $request) {
+    public function updateTx(Request $request)
+    {
         $route =  $request->get('route');
-        $dir_route = explode('/',$route);
+        $dir_route = explode('/', $route);
         array_pop($dir_route);
-        $dir_route = implode('/',$dir_route);
+        $dir_route = implode('/', $dir_route);
         $text =  $request->get('text');
 
-        Storage::put($route,$text);
+        Storage::put($route, $text);
 
         return redirect("/directory?route={$dir_route}");
     }
 
-    public function showFile(Request $request) {
+    public function showFile(Request $request)
+    {
         $route  = $request->get('route');
         $fileInfo = pathinfo(Storage::url($route));
-        $imageExtensions = ['png','jpg','jpeg','gif'];
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'gif'];
 
-        if (array_search($fileInfo['extension'],$imageExtensions) === false) {
+        if (array_search($fileInfo['extension'], $imageExtensions) === false) {
             $text = Storage::get($route);
-            return view('viewText',compact('text','route'));
-        }else{
+            return view('viewText', compact('text', 'route'));
+        } else {
             $imageUrl = Storage::url($route);
-            return view('viewimage',compact('imageUrl','route'));
-        }   
+            return view('viewimage', compact('imageUrl', 'route'));
+        }
     }
 
-    public function createMark(Request $request) {
+    public function createMark(Request $request)
+    {
         dd($request->all());
+    }
+    public function selectActions(Request $request)
+    {
+        $move_path = $request->move_path;
+        $action = $request->action;
+        $dirs  = $request->dirs;
+        $files  = $request->get('files');
+
+        if ($move_path) {
+            if ($dirs) {
+                foreach ($dirs as $dir => $value) {
+                    $fileName = explode('/', $dir)[count(explode('/', $dir)) - 1];
+                    Storage::move($dir, $move_path . '/' . $fileName);
+                }
+            }
+            if ($files) {
+                foreach ($files as $file => $value) {
+                    $fileName = explode('/', $file)[count(explode('/', $file)) - 1];
+                    Storage::move($file, $move_path . '/' . $fileName);
+                }
+            }
+            return redirect()->back();
+        } else {
+            if ($action == 'delete') {
+            }
+            if ($action == 'download') {
+            }
+        }
     }
 };
 

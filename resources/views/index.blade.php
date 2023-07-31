@@ -148,72 +148,74 @@
                     </tbody>
                 </table>
                 <br>
-                <table id="maintable" style="width: 925px;">
-                    <tbody>
-                        <tr class="browse_rows_actions">
-                            <td colspan="6">
-                                <table style="width: 925px;">
-                                    <tbody>
-                                        <tr>
-                                            <td valign="top" style="text-align: left;">
-                                                <a  id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</a>
-                                                <a id="smallbutton" href='{{url("upload-text?route={$route}")}}'>فایل جدید</a>
-                                                <a id="smallbutton" href='{{url("upload-file?route={$route}")}}'>آپلود</a>
-                                                <a id="smallbutton">انتقال</a>
-                                                <a id="smallbutton">حذف</a>
-                                                <a id="smallbutton">دانلود</a>
-                                            </td>
-                                            {{-- <td valign="top" style="text-align: right;">
-                                                <div style="margin-top: 3px;">
-                                                    <input type="button" id="smallbutton" value="دانلود"
-                                                        title="Download a zip file containing all selected entries (accesskey x)"
-                                                        accesskey="x">
-                                                </div>
-                                            </td>  --}}
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-                <ul id="items">
-                    @foreach ($directories as $dir)
-                        <li>
-                            <div class="item-title">
-                                <input type="checkbox" /> <img src="files/folder.png" /> {{ $dir['name'] }}
-                            </div>
-
-                            <div class="items-meta">
-                                <a href='{{url("delete-file?route={$dir['route']}")}}'>حذف</a> -
-                                <a onclick="moveFile( '{{$dir['route']}}' )">انتقال</a> -
-                                <a onclick="changeName( '{{$dir['route']}}' )">تغییر نام</a>
-                            </div>
-                        </li>
-                    @endforeach
-                    @foreach ($files as $file)
-                        <li>
-                            <div class="item-title">
-                                <input type="checkbox" />
-                                <p class="item-title-inner">{{ $file['filename'] }}</p>
-                            </div>
-                            <div class="item-prob">
-                                <p>{{ $file['filename'] }}</p> -
-                                <p>{{ $file['size'] }}mb</p> -
-                                <p>Last Modify : {{ $file['modify'] }}</p>
-                            </div>
-                            <div class="items-meta">
-                                <a href='{{url("delete-file?route={$file['route']}")}}'>حذف</a> -
-                                @if(array_search($file['ext'],$imageExtensions) === false) <a href='{{url("edit-txt?route={$file['route']}")}}'>ویرایش</a> - @else <span></span> @endIf
-                                <a href='{{url("show?route={$file['route']}")}}'>نمایش</a> -
-                                <a onclick="moveFile( '{{$file['route']}}' )">انتقال</a> -
-                                <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a>
-                            </div>
-                        </li>
-                    @endforeach
-
-                </ul>
+                <form action='{{url("select-actions?from={$route}")}}' method="POST" id="select_actions">
+                    @csrf
+                    <table id="maintable" style="width: 925px;">
+                        <tbody>
+                            <tr class="browse_rows_actions">
+                                <td colspan="6">
+                                    <table style="width: 925px;">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" style="text-align: left;">
+                                                    <a  id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</a>
+                                                    <a id="smallbutton" href='{{url("upload-text?route={$route}")}}'>فایل جدید</a>
+                                                    <a  id="smallbutton" onclick="moveSelectAction('{{$route}}')">انتقال</a>
+                                                    <button type="submit" name="action"  value='delete' id="smallbutton">حذف</button>
+                                                    <button type="submit" name="action"  value='download' id="smallbutton">دانلود</button>
+                                                </td>
+                                                {{-- <td valign="top" style="text-align: right;">
+                                                    <div style="margin-top: 3px;">
+                                                        <input type="button" id="smallbutton" value="دانلود"
+                                                            title="Download a zip file containing all selected entries (accesskey x)"
+                                                            accesskey="x">
+                                                    </div>
+                                                </td>  --}}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+    
+                        </tbody>
+                    </table>
+                    <ul id="items">
+                        <input type="hidden" id="move_path">
+                        @foreach ($directories as $dir)
+                            <li>
+                                <div class="item-title">
+                                    <input type="checkbox" name="dirs[{{$dir['route']}}]" /> <img src="files/folder.png" /> {{ $dir['name'] }}
+                                </div>   
+                                <div class="items-meta">
+                                    <a href='{{url("delete-file?route={$dir['route']}")}}'>حذف</a> -
+                                    <a onclick="moveFile( '{{$dir['route']}}' )">انتقال</a> -
+                                    <a onclick="changeName( '{{$dir['route']}}' )">تغییر نام</a>
+                                </div>
+                            </li>
+                        @endforeach
+                        @foreach ($files as $file)
+                            <li>
+                                <div class="item-title">
+                                    <input type="checkbox" name="files[{{$file['route']}}]"/>
+                                    <p class="item-title-inner">{{ $file['filename'] }}</p>
+                                </div>
+                                <div class="item-prob">
+                                    <p>{{ $file['filename'] }}</p> -
+                                    <p>{{ $file['size'] }}mb</p> -
+                                    <p>Last Modify : {{ $file['modify'] }}</p>
+                                </div>
+                                <div class="items-meta">
+                                    <a href='{{url("delete-file?route={$file['route']}")}}'>حذف</a> -
+                                    @if(array_search($file['ext'],$imageExtensions) === false) <a href='{{url("edit-txt?route={$file['route']}")}}'>ویرایش</a> - @else <span></span> @endIf
+                                    <a href='{{url("show?route={$file['route']}")}}'>نمایش</a> -
+                                    <a onclick="moveFile( '{{$file['route']}}' )">انتقال</a> -
+                                    <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a>
+                                </div>
+                            </li>
+                        @endforeach
+    
+                    </ul>
+                </form>
             </div>
             <!-- ENDS content -->
         </div>

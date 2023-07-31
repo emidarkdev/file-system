@@ -27,5 +27,6 @@ Route::get('/edit-txt',[HomeController::class,'editTx']);
 Route::post('/update-txt',[HomeController::class,'updateTx']);
 Route::get('/show',[HomeController::class,'showFile']);
 Route::post('/create-mark',[HomeController::class,'createMark']);
+Route::post('/select-actions',[HomeController::class,'selectActions']);
 
 
