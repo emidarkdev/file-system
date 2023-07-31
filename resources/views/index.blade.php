@@ -205,7 +205,7 @@
                             </div>
                             <div class="items-meta">
                                 <a href='{{url("delete-file?route={$file['route']}")}}'>حذف</a> -
-                                <a href="#">ویرایش</a> -
+                                @if(array_search($file['ext'],$imageExtensions) === false) <a href='{{url("edit-txt?route={$file['route']}")}}'>ویرایش</a> - @else <span></span> @endIf
                                 <a href="#">نمایش</a> -
                                 <a onclick="moveFile( '{{$file['route']}}' )">انتقال</a> -
                                 <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a>

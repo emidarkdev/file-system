@@ -23,6 +23,7 @@ Route::get('/create-dir',[HomeController::class,'createDir']);
 Route::get('/upload-file',[HomeController::class,'uploadShow']);
 Route::get('/upload-text',[HomeController::class,'uploadText']);
 Route::post('/upload',[HomeController::class,'upload']);
-
+Route::get('/edit-txt',[HomeController::class,'editTx']);
+Route::post('/update-txt',[HomeController::class,'updateTx']);
 
 

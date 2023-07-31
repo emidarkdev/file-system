@@ -17,6 +17,7 @@ class HomeController extends Controller
         $route = '/';
         $directories = [];
         $files = [];
+        $imageExtensions = ['png','jpg','jpeg','gif'];
 
         foreach (Storage::directories() as $dir) {
             array_push($directories, [
@@ -35,7 +36,7 @@ class HomeController extends Controller
                 'route' => $file,
             ]);
         }
-        return view('index', compact('directories', 'files', 'route'));
+        return view('index', compact('directories', 'files', 'route','imageExtensions'));
     }
 
 
@@ -47,12 +48,12 @@ class HomeController extends Controller
         $route = $request->get('route') ? $request->get('route') : '/';
         $directories = [];
         $files = [];
-
+        $imageExtensions = ['png','jpg','jpeg','gif'];
         foreach (Storage::directories($route) as $dir) {
             array_push($directories, [
                 'name' => pathinfo(storage_path($dir))['filename'],
                 'route' => $dir,
-                'modify' => date('Y/m/d h:i:s', Storage::lastModified($dir)),
+                'modify' => date('Y/m/d', Storage::lastModified($dir)),
             ]);
         }
         foreach (Storage::files($route) as $file) {
@@ -61,11 +62,11 @@ class HomeController extends Controller
                 'ext' => pathinfo(storage_path($file))['extension'],
                 'filename' => pathinfo(storage_path($file))['filename'] . '.' . pathinfo(storage_path($file))['extension'],
                 'size' => number_format(Storage::size($file) / 1048576, 2),
-                'modify' => date('Y/m/d h:i:s', Storage::lastModified($file)),
+                'modify' => date('Y/m/d', Storage::lastModified($file)),
                 'route' => $file,
             ]);
         }
-        return view('index', compact('directories', 'files', 'route'));
+        return view('index', compact('directories', 'files', 'route','imageExtensions'));
     }
 
 
@@ -177,10 +178,25 @@ class HomeController extends Controller
         }
         return redirect("/directory?route={$route}");
     }
+
+    public function editTx(Request $request) {
+        $route =  $request->get('route');
+        $text_info = pathinfo(Storage::url($route));
+        $text_info['text'] = Storage::get($route);
+        return view('editTx',compact('text_info','route'));
+    }
+    public function updateTx(Request $request) {
+        $route =  $request->get('route');
+        $dir_route = explode('/',$route);
+        array_pop($dir_route);
+        $dir_route = implode('/',$dir_route);
+        $text =  $request->get('text');
+
+        Storage::put($route,$text);
+
+        return redirect("/directory?route={$dir_route}");
+    }
 };
-
-
-
 
 
 
