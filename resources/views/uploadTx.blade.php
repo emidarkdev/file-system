@@ -34,7 +34,18 @@
                             <div class="viewfooter">
                             <div>
                             <textarea name="text" id="" cols="30" rows="10"></textarea>
-							<input type="submit" class="button2" value="آپلود فایل" />
+							<input type="submit" class="button2" value="ذخیره فایل" />
+                            </div>
+                        </form>
+                    </div>
+					<hr>
+					<div class="imgeviewer">
+                    	<form action='{{url("upload?route={$route}")}}' method="POST" enctype="multipart/form-data" target="_self">
+							@csrf
+                            <div class="viewfooter">
+                            <div>
+                            <input type="file" name="text_file" accept="text/*">
+							<input type="submit" class="button2" value="اپلود فایل" />
                             </div>
                         </form>
                     </div>

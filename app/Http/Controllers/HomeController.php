@@ -147,23 +147,35 @@ class HomeController extends Controller
         $route  = $request->get('route');
         return view('upload', compact('route'));
     }
-    public function uploadText(Request $request) {
+    public function uploadText(Request $request)
+    {
         $route  = $request->get('route');
         return view('uploadTx', compact('route'));
     }
     public function upload(Request $request)
     {
         $image  = $request->has('image') ? $request->image : null;
+        $text  = $request->has('text') ? $request->text : null;
+        $text_file  = $request->has('text_file') ? $request->text_file : null;
         $mark  = $request->has('mark') ? ($request->mark == 'on' ? true : false) : null;
         $route  = $request->route;
 
         if ($image) {
             $imageName = Str::random(8) . '-' . explode('.', $image->getClientOriginalName())[0] . '.' . $image->extension();
             Storage::putFileAs($route, $image, $imageName);
-            dd($route . '/' . $imageName);
-        }else{
-
+        } else {
+            if ($text) {
+                $fileName = Str::random(8) . '.' . 'txt';
+                Storage::put(trim($route, '/') . '/' . $fileName, $text);
+            }
+            if ($text_file) {
+                $ext = $text_file->extension() == null ? 'txt' : $text_file->extension();
+                $fileName = Str::random(8) . '-' . explode('.', $text_file->getClientOriginalName())[0] . '.' . $ext;
+                Storage::putFileAs($route, $text_file, $fileName);
+                
+            }
         }
+        return redirect("/directory?route={$route}");
     }
 };
 

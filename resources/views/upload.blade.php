@@ -33,7 +33,7 @@
 							@csrf
                             <div class="viewfooter">
                             <div>
-                            <input type="file" name="image"/>
+                            <input type="file" name="file" accept="image/*"/>
                             	<input type="checkbox" name="mark"/> - افزودن واترمارک
                             </div>
 							<input type="submit" class="button2" value="آپلود فایل" />
