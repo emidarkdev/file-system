@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
+|
+|
 */
 
 Route::get('/',[HomeController::class,'index']);
@@ -28,5 +30,6 @@ Route::post('/update-txt',[HomeController::class,'updateTx']);
 Route::get('/show',[HomeController::class,'showFile']);
 Route::post('/create-mark',[HomeController::class,'createMark']);
 Route::post('/select-actions',[HomeController::class,'selectActions']);
+Route::get('/download',[HomeController::class,'download']);
 
 

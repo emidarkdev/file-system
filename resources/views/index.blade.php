@@ -160,9 +160,9 @@
                                                 <td valign="top" style="text-align: left;">
                                                     <a  id="smallbutton" onclick="newDirectory('{{$route}}')">پوشه جدید</a>
                                                     <a id="smallbutton" href='{{url("upload-text?route={$route}")}}'>فایل جدید</a>
+                                                    <a id="smallbutton" href='{{url("upload-file?route={$route}")}}'>اپلود</a>
                                                     <a  id="smallbutton" onclick="moveSelectAction('{{$route}}')">انتقال</a>
-                                                    <button type="submit" name="action"  value='delete' id="smallbutton">حذف</button>
-                                                    <button type="submit" name="action"  value='download' id="smallbutton">دانلود</button>
+                                                    <button id="smallbutton" type="submit" name="action" value="delete">حذف</button>
                                                 </td>
                                                 {{-- <td valign="top" style="text-align: right;">
                                                     <div style="margin-top: 3px;">
@@ -190,6 +190,7 @@
                                     <a href='{{url("delete-file?route={$dir['route']}")}}'>حذف</a> -
                                     <a onclick="moveFile( '{{$dir['route']}}' )">انتقال</a> -
                                     <a onclick="changeName( '{{$dir['route']}}' )">تغییر نام</a>
+                                    {{-- <a href='{{url("download?route={$dir['route']}")}}'>دانلود</a> --}}
                                 </div>
                             </li>
                         @endforeach
@@ -209,7 +210,8 @@
                                     @if(array_search($file['ext'],$imageExtensions) === false) <a href='{{url("edit-txt?route={$file['route']}")}}'>ویرایش</a> - @else <span></span> @endIf
                                     <a href='{{url("show?route={$file['route']}")}}'>نمایش</a> -
                                     <a onclick="moveFile( '{{$file['route']}}' )">انتقال</a> -
-                                    <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a>
+                                    <a onclick="changeName( '{{$file['route']}}' )">تغییر نام</a> -
+                                    <a href='{{url("download?route={$file['route']}")}}'>دانلود</a>
                                 </div>
                             </li>
                         @endforeach

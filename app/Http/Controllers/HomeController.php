@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class HomeController extends Controller
 {
@@ -149,22 +150,34 @@ class HomeController extends Controller
         $route  = $request->get('route');
         return view('upload', compact('route'));
     }
+
+
     public function uploadText(Request $request)
     {
         $route  = $request->get('route');
         return view('uploadTx', compact('route'));
     }
+
+
+
     public function upload(Request $request)
     {
-        $image  = $request->has('image') ? $request->image : null;
-        $text  = $request->has('text') ? $request->text : null;
-        $text_file  = $request->has('text_file') ? $request->text_file : null;
+        $image  = $request->file('image');
+        $text = $request->text;
+        $text_file = $request->text_file;
         $mark  = $request->has('mark') ? ($request->mark == 'on' ? true : false) : null;
         $route  = $request->route;
 
         if ($image) {
             $imageName = Str::random(8) . '-' . explode('.', $image->getClientOriginalName())[0] . '.' . $image->extension();
-            Storage::putFileAs($route, $image, $imageName);
+            if ($mark) {
+                $watermark = public_path('files/watermark.png');
+                $mainImage = Image::make($request->file('image')->getRealPath());
+                $mainImage->insert($watermark, 'top-left', 20, 20);
+                $mainImage->save(public_path('storage/'.$route.'/'.$imageName));
+            } else {
+                Storage::putFileAs($route, $image, $imageName);
+            }
         } else {
             if ($text) {
                 $fileName = Str::random(8) . '.' . 'txt';
@@ -186,6 +199,9 @@ class HomeController extends Controller
         $text_info['text'] = Storage::get($route);
         return view('editTx', compact('text_info', 'route'));
     }
+
+
+
     public function updateTx(Request $request)
     {
         $route =  $request->get('route');
@@ -198,6 +214,7 @@ class HomeController extends Controller
 
         return redirect("/directory?route={$dir_route}");
     }
+
 
     public function showFile(Request $request)
     {
@@ -218,8 +235,11 @@ class HomeController extends Controller
     {
         dd($request->all());
     }
+
+
     public function selectActions(Request $request)
     {
+
         $move_path = $request->move_path;
         $action = $request->action;
         $dirs  = $request->dirs;
@@ -254,7 +274,21 @@ class HomeController extends Controller
                 return redirect()->back();
             }
             if ($action == 'download') {
+                dd($request->all());
             }
+        }
+    }
+
+    public function download(Request $request)
+    {
+        $route = $request->get('route');
+        $checkDir = Storage::directoryExists($route);
+
+        if ($checkDir) {
+            // folder
+        } else {
+            $fileName = explode('/', $route)[count(explode('/', $route)) - 1];
+            return Storage::download($route, $fileName);
         }
     }
 };
