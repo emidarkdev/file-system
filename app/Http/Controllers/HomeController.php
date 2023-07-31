@@ -241,6 +241,17 @@ class HomeController extends Controller
             return redirect()->back();
         } else {
             if ($action == 'delete') {
+                if ($dirs) {
+                    foreach ($dirs as $dir => $value) {
+                        Storage::deleteDirectory($dir);
+                    }
+                }
+                if ($files) {
+                    foreach ($files as $file => $value) {
+                        Storage::delete($file);
+                    }
+                }
+                return redirect()->back();
             }
             if ($action == 'download') {
             }
