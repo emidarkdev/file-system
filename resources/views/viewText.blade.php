@@ -25,18 +25,14 @@
 				<div id="content">
 					<!-- title -->
 					<div id="page-title">
-						<span class="title">مشاهده تصویر - <a href="{{url()->previous()}}"> » بازگشت </a></span>
+						<span class="title">مشاهده متن - <a href="{{url()->previous()}}"> » بازگشت </a></span>
 						<div style="text-align: right; margin-top: 10px;">
 						</div>
 					</div>
 					<div class="imgeviewer">
-                    	<form action='{{url("create-mark?route={$route}")}}' method="post" target="_self">
-							@csrf
-	                    	<img src="{{$imageUrl}}" class="imageviewer" />
-                            <div class="viewfooter">
-							<input type="submit" class="button2" value="افزودن واترمارک" />
-                            </div>
-                        </form>
+                    	<textarea name="" id="" cols="30" rows="10" disabled>
+							{{$text}}
+						</textarea>
                     </div>
 			</div>
 			<!-- ENDS MAIN -->

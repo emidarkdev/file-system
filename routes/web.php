@@ -25,5 +25,7 @@ Route::get('/upload-text',[HomeController::class,'uploadText']);
 Route::post('/upload',[HomeController::class,'upload']);
 Route::get('/edit-txt',[HomeController::class,'editTx']);
 Route::post('/update-txt',[HomeController::class,'updateTx']);
+Route::get('/show',[HomeController::class,'showFile']);
+Route::post('/create-mark',[HomeController::class,'createMark']);
 
 

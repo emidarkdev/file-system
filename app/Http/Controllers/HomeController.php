@@ -196,6 +196,24 @@ class HomeController extends Controller
 
         return redirect("/directory?route={$dir_route}");
     }
+
+    public function showFile(Request $request) {
+        $route  = $request->get('route');
+        $fileInfo = pathinfo(Storage::url($route));
+        $imageExtensions = ['png','jpg','jpeg','gif'];
+
+        if (array_search($fileInfo['extension'],$imageExtensions) === false) {
+            $text = Storage::get($route);
+            return view('viewText',compact('text','route'));
+        }else{
+            $imageUrl = Storage::url($route);
+            return view('viewimage',compact('imageUrl','route'));
+        }   
+    }
+
+    public function createMark(Request $request) {
+        dd($request->all());
+    }
 };
 
 
